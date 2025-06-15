@@ -1,0 +1,35 @@
+[project]
+name = "mcp-server-odoo"
+version = "0.1.0"
+description = "A Model Context Protocol server providing tools to integrate Odoo with LLMs"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Alberto Re" }]
+maintainers = [{ name = "Alberto Re", email = "alberto.re@gmail.com" }]
+keywords = ["odoo", "mcp", "llm", "automation"]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+    "mcp[cli]>=1.9.2",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0,<5",
+]
+
+[project.scripts]
+mcp-server-odoo = "mcp_server_odoo:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "C90"]
