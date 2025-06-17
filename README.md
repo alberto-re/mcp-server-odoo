@@ -10,41 +10,34 @@ An extensible [Model Context Protocol](https://modelcontextprotocol.io) server t
 
 ## Configuration
 
-The MCP server is configured using environment variables.
+The server looks for the following variables in the execution environment:
 
-The easiest way to set these up is to copy the `.env.example` file to `.env` and
-edit the values for your environment.
+| Variable | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `ODOO_BASE_URL` | Yes | The URL of the Odoo instance | `http://localhost:8069` |
+| `ODOO_DATABASE` | Yes | The database name to connect to | `mydatabase` |
+| `ODOO_USERNAME` | Yes | Username for authentication | `admin` |
+| `ODOO_PASSWORD` | Yes | Password or API Key for authentication | `admin` |
+| `ODOO_VERSION` | Yes | Major version of your Odoo server | `18` |
+| `LOG_LEVEL` | No | Desided logging level (see [Python logging levels](https://docs.python.org/3/library/logging.html#logging-levels)), default is INFO | `INFO` |
+| `TRANSPORT_PROTOCOL` | Yes | The [MCP transport protocol](https://modelcontextprotocol.io/docs/concepts/transports) to use. Valid values are `stdio` for local-only communication or `sse` / `streamable-http` for remote communication | `stdio` |
+| `TOOLS_TO_REGISTER` | Yes | Comma-separated list of tools to expose to the MCP client. Tools can be chosen from those included within this project (see directory `src/mcp_server_odoo/tools`), or custom ones provided by external files (see `EXT_DIRECTORIES`) | `search_partners,search_quotations,search_sales_orders` |
+| `EXT_DIRECTORIES` | No | Comma-separated list of paths to search for additional tools that can be loaded at runtime | `/your/custom/path` |
 
-Here's an example of how a typical `.env` looks like:
+## Installation
 
+Install the tool with `uv tool`:
+
+```sh
+uv tool install --from git+https://github.com/alberto-re/mcp-server-odoo mcp-server-odoo
 ```
-ODOO_BASE_URL=http://localhost:8069
-ODOO_DATABASE=odoo
-ODOO_USERNAME=admin
-ODOO_PASSWORD=admin
-ODOO_VERSION=18
-LOG_LEVEL=INFO
-TRANSPORT_PROTOCOL=sse
-TOOLS_TO_REGISTER=search_partners,search_quotations,search_sales_orders
-EXT_DIRECTORIES=
-```
-
-### Configuration options
-
-1. ODOO_BASE_URL: the base url of your Odoo instance
-2. ODOO_DATABASE: the database name to connect to
-3. ODOO_USERNAME: the username to use for authentication
-4. ODOO_PASSWORD: the password to use for authentication
-5. ODOO_VERSION: major version of your Odoo server (currently supports versions 16, 17 and 18)
-6. LOG_LEVEL: desired logging level (see [Python logging levels](https://docs.python.org/3/library/logging.html#logging-levels))
-7. TRANSPORT_PROTOCOL: the [MCP transport protocol](https://modelcontextprotocol.io/docs/concepts/transports) to use. Valid values are `stdio` for local-only communication or `sse` / `streamable-http` for remote communication
-8. TOOLS_TO_REGISTER: a comma-separated list of tools to expose to the MCP client. Tools can be chosen from those included within this project (see directory `src/mcp_server_odoo/tools`), or custom ones provided by external files (see `EXT_DIRECTORIES`)
-9. EXT_DIRECTORIES: optional comma-separated list of paths to search for additional tools that can be loaded at runtime
 
 ## Run the server
 
+Execute it directly with `uvx`:
+
 ```sh
-uv run mcp-server-odoo
+uvx mcp-server-odoo
 ```
 
 ## Integrations
@@ -61,17 +54,52 @@ uv run mcp-server-odoo
 {
   "mcpServers": {
     "mcp-server-odoo": {
-      "command": "uv",
+      "command": "uvx",
       "args": [
-        "--directory",
-        "/full/path/to/mcp-server-odoo",
-        "run",
         "mcp-server-odoo"
-      ]
+      ],
+      "env": {
+        "ODOO_BASE_URL": "http://localhost:8069",
+        "ODOO_DATABASE": "mydatabase",
+        "ODOO_USERNAME": "admin",
+        "ODOO_PASSWORD": "admin",
+        "ODOO_VERSION": "18",
+        "TRANSPORT_PROTOCOL": "stdio",
+        "TOOLS_TO_REGISTER": "search_partners,search_quotations,search_sales_orders"
+      }
     }
   }
 }
 ```
-3. Remember to set the environment variable TRANSPORT_PROTOCOL to 'stdio'.
 
-4. Restart Claude for Desktop.
+3. Restart Claude for Desktop.
+
+### Connecting to mcphost
+
+1. Edit the [mcphost](https://github.com/mark3labs/mcphost) configuration file. See the [documentation](https://github.com/mark3labs/mcphost?tab=readme-ov-file#mcp-server) for where it looks for configuration files.
+
+2. Add the server configuration under the mcpServers section.
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-odoo": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-odoo"
+      ],
+      "env": {
+        "ODOO_BASE_URL": "http://localhost:8069",
+        "ODOO_DATABASE": "mydatabase",
+        "ODOO_USERNAME": "admin",
+        "ODOO_PASSWORD": "admin",
+        "ODOO_VERSION": "18",
+        "TRANSPORT_PROTOCOL": "stdio",
+        "TOOLS_TO_REGISTER": "search_partners,search_quotations,search_sales_orders"
+      }
+    }
+  }
+}
+```
+
+3. Execute the `mcphost` command.
