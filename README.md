@@ -4,6 +4,12 @@ An extensible [Model Context Protocol](https://modelcontextprotocol.io) server t
 
 **Beware: the project is in very early development. Expect rough edges. We welcome any feedback!**
 
+## MCP server in action
+
+Here's a demonstration of what kind of capabilities the MCP enables in [Claude for Desktop](https://claude.ai/download):
+
+![MCP in action](screenshots/claude_sales_trend.png)
+
 ## Prerequisites
 
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
