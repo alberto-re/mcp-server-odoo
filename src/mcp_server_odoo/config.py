@@ -8,6 +8,7 @@ DEFAULT_LOG_LEVEL = "INFO"
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 DEFAULT_TRANSPORT_PROTOCOL = "sse"
 DEFAULT_TOOLS_TO_REGISTER = "search_partners,search_quotations,search_sales_orders"
+DEFAULT_HOST = "127.0.0.1"
 
 
 load_dotenv(override=True)
@@ -55,6 +56,7 @@ class Config:
         self._transport_protocol = os.getenv(
             "TRANSPORT_PROTOCOL", DEFAULT_TRANSPORT_PROTOCOL
         )
+        self._host = os.getenv("HOST", DEFAULT_HOST)
         self._tools_to_register = os.getenv(
             "TOOLS_TO_REGISTER", DEFAULT_TOOLS_TO_REGISTER
         )
@@ -92,6 +94,10 @@ class Config:
     @property
     def transport_protocol(self) -> str:
         return self._transport_protocol
+
+    @property
+    def host(self) -> str:
+        return self._host
 
     @property
     def tools_to_register(self) -> str:

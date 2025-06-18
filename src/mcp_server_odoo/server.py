@@ -38,7 +38,7 @@ async def app_lifespan(_: FastMCP) -> AsyncIterator[AppContext]:
 
 class OdooMCP:
     def __init__(self) -> None:
-        self._mcp = FastMCP(MCP_SERVER_NAME, lifespan=app_lifespan)
+        self._mcp = FastMCP(MCP_SERVER_NAME, lifespan=app_lifespan, host=config.host)
         self._register_capabilities()
 
     def _register_capabilities(self) -> None:

@@ -27,6 +27,7 @@ The server looks for the following variables in the execution environment:
 | `ODOO_VERSION` | Yes | Major version of your Odoo server | `18` |
 | `LOG_LEVEL` | No | Desided logging level (see [Python logging levels](https://docs.python.org/3/library/logging.html#logging-levels)), default is INFO | `INFO` |
 | `TRANSPORT_PROTOCOL` | Yes | The [MCP transport protocol](https://modelcontextprotocol.io/docs/concepts/transports) to use. Valid values are `stdio` for local-only communication or `sse` / `streamable-http` for remote communication | `stdio` |
+| `HOST` | No | The IP address(es) on which the server is to listen for connections from clients | `127.0.0.1` |
 | `TOOLS_TO_REGISTER` | Yes | Comma-separated list of tools to expose to the MCP client. Tools can be chosen from those included within this project (see directory `src/mcp_server_odoo/tools`), or custom ones provided by external files (see `EXT_DIRECTORIES`) | `search_partners,search_quotations,search_sales_orders,search_customer_invoices` |
 | `EXT_DIRECTORIES` | No | Comma-separated list of paths to search for additional tools that can be loaded at runtime | `/your/custom/path` |
 
