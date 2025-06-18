@@ -24,3 +24,10 @@ async def search_sales_orders(ctx: Context, limit: int = 100) -> str:
 
 
 search_sales_orders.__doc__ = common.search_sales_orders.__doc__
+
+
+async def search_customer_invoices(ctx: Context, limit: int = 100) -> str:
+    return await common.search_customer_invoices(ctx, limit)
+
+
+search_customer_invoices.__doc__ = common.search_customer_invoices.__doc__

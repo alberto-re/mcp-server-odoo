@@ -98,3 +98,41 @@ async def search_quotations(ctx: Context, limit: int = 100) -> str:
         model, [domain], fields, limit
     )
     return json.dumps(sales_orders, indent=2)
+
+
+async def search_customer_invoices(ctx: Context, limit: int = 100) -> str:
+    """
+    Retrieve a list of Odoo customer invoices (account.move model) filtered by name
+    or email.
+
+    Args:
+        limit (int): Optional. Maximum number of results to return. Defaults to 100.
+
+    Returns:
+        A JSON-formatted string with a list of dictionaries, each representing a
+        customer invoice with fields:
+            - name
+            - partner_id
+            - invoice_date
+            - invoice_date_due
+            - currency_id
+            - amount_untaxed
+            - amount_tax
+            - amount_total
+    """
+    model = "account.move"
+    domain = [["move_type", "=", "out_invoice"], ["state", "=", "posted"]]
+    fields = [
+        "name",
+        "partner_id",
+        "invoice_date",
+        "invoice_date_due",
+        "currency_id",
+        "amount_untaxed",
+        "amount_tax",
+        "amount_total",
+    ]
+    account_move = ctx.request_context.lifespan_context.client._search_records(
+        model, [domain], fields, limit
+    )
+    return json.dumps(account_move, indent=2)
