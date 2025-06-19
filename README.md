@@ -47,6 +47,25 @@ Execute it directly with `uvx`:
 uvx mcp-server-odoo
 ```
 
+## Run within Docker
+
+A `Dockerfile` is included if you wish to run the MCP server inside a Docker container.
+
+To build the container execute this command from the root directory of the repository:
+
+```sh
+docker build -t mcp-server-odoo .
+```
+
+Now you can execute the container from the built image with:
+
+```sh
+docker run --rm --env-file /path/to/env/file -p 8000:8000 mcp-server-odoo
+```
+
+When running inside a container remember to use an HTTP based transport protocol (i.e. set `TRANSPORT_PROTOCOL` to `sse` or `streamable-http`)
+and to make the server listen to all interfaces (i.e. set `HOST` to `0.0.0.0`).
+
 ## Integrations
 
 ### Connecting to Claude Desktop
