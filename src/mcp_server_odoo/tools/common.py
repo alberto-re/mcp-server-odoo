@@ -46,9 +46,8 @@ async def search_partners(
     if email:
         domain.append(["email", "ilike", email])
     fields = ["name", "phone", "mobile", "email", "website"]
-    partners = ctx.request_context.lifespan_context.client._search_records(
-        model, [domain], fields, limit
-    )
+    ids = ctx.request_context.lifespan_context.client._search(model, [domain], limit)
+    partners = ctx.request_context.lifespan_context.client._read(model, ids, fields)
     return json.dumps(partners, indent=2)
 
 
@@ -70,9 +69,8 @@ async def search_sales_orders(ctx: Context, limit: int = 100) -> str:
     model = "sale.order"
     domain = [["state", "in", ["sale"]]]
     fields = ["name", "date_order", "payment_term_id", "partner_id"]
-    sales_orders = ctx.request_context.lifespan_context.client._search_records(
-        model, [domain], fields, limit
-    )
+    ids = ctx.request_context.lifespan_context.client._search(model, [domain], limit)
+    sales_orders = ctx.request_context.lifespan_context.client._read(model, ids, fields)
     return json.dumps(sales_orders, indent=2)
 
 
@@ -94,9 +92,8 @@ async def search_quotations(ctx: Context, limit: int = 100) -> str:
     model = "sale.order"
     domain = [["state", "in", ["draft", "draft_sent"]]]
     fields = ["name", "state", "date_order", "payment_term_id", "partner_id"]
-    sales_orders = ctx.request_context.lifespan_context.client._search_records(
-        model, [domain], fields, limit
-    )
+    ids = ctx.request_context.lifespan_context.client._search(model, [domain], limit)
+    sales_orders = ctx.request_context.lifespan_context.client._read(model, ids, fields)
     return json.dumps(sales_orders, indent=2)
 
 
@@ -132,7 +129,6 @@ async def search_customer_invoices(ctx: Context, limit: int = 100) -> str:
         "amount_tax",
         "amount_total",
     ]
-    account_move = ctx.request_context.lifespan_context.client._search_records(
-        model, [domain], fields, limit
-    )
+    ids = ctx.request_context.lifespan_context.client._search(model, [domain], limit)
+    account_move = ctx.request_context.lifespan_context.client._read(model, ids, fields)
     return json.dumps(account_move, indent=2)

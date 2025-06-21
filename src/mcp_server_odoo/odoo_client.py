@@ -42,24 +42,21 @@ class OdooClient:
         except Exception as ex:
             raise ex
 
-    def _search_records(
-        self, model: str, domain: list, fields: list[str], limit: int
-    ) -> list[Any]:
-        """Perform a search on records of a target model.
+    def _search(self, model: str, domain: list, limit: int) -> list[int]:
+        """Search for all records of model matching given domain.
+
+        The number of elements to return is limited up to 'limit'.
 
         Args:
             model: The model name, for example 'res_partner'.
-            domain: The search domain, for example '[[["id", "=", 2]]]'.
-            fields: The model fields to include in each record.
+            domain: The search domain, for example '[[["name", "ilike", "foo"]]]'.
             limit: The maximum number of records to return.
         """
         method = "search"
         logger.info(
-            "Executing method %s with model=%s, domain=%s, limit=%s",
+            "Executing '%s' method on model '%s'",
             method,
             model,
-            domain,
-            limit,
         )
         ids = self._models.execute_kw(
             self._db,
@@ -70,12 +67,28 @@ class OdooClient:
             domain,
             {"limit": limit},
         )
+        return cast(list[int], ids)
+
+    def _read(self, model: str, ids: list[int], fields: list[str]) -> list[Any]:
+        """Retrieve records data.
+
+        Args:
+            model: The model name, for example 'res_partner'.
+            ids: A list of record ID to fetch.
+            fields: The model fields to include in each record.
+        """
+        method = "read"
+        logger.info(
+            "Executing '%s' method on model '%s'",
+            method,
+            model,
+        )
         records = self._models.execute_kw(
             self._db,
             self._uid,
             self._password,
             model,
-            "read",
+            method,
             [ids],
             {"fields": fields},
         )
