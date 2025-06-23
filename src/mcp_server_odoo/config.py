@@ -1,4 +1,5 @@
 import os
+from typing import Literal, cast
 
 from dotenv import load_dotenv
 
@@ -56,6 +57,11 @@ class Config:
         self._transport_protocol = os.getenv(
             "TRANSPORT_PROTOCOL", DEFAULT_TRANSPORT_PROTOCOL
         )
+        if self._transport_protocol not in ["sse", "stdio", "streamable-http"]:
+            raise ConfigError(
+                f"Invalid transport protocol '{self._transport_protocol}'. "
+                "Valid values are sse, stdio or streamable-http"
+            )
         self._host = os.getenv("HOST", DEFAULT_HOST)
         self._tools_to_register = os.getenv(
             "TOOLS_TO_REGISTER", DEFAULT_TOOLS_TO_REGISTER
@@ -92,8 +98,10 @@ class Config:
         return self._log_format
 
     @property
-    def transport_protocol(self) -> str:
-        return self._transport_protocol
+    def transport_protocol(self) -> Literal["stdio", "sse", "streamable-http"]:
+        return cast(
+            Literal["stdio", "sse", "streamable-http"], self._transport_protocol
+        )
 
     @property
     def host(self) -> str:
