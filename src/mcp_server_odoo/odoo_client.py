@@ -29,18 +29,13 @@ class OdooClient:
         Raises:
             ConnectionError: In case authenticate() call fails.
         """
-        try:
-            uid = self._common.authenticate(
-                self._db, self._username, self._password, {}
+        uid = self._common.authenticate(self._db, self._username, self._password, {})
+        if not uid:
+            raise ConnectionError(
+                "Authentication failed. Are ODOO_DATABASE, ODOO_USERNAME and "
+                "ODOO_PASSWORD set correctly?"
             )
-            if not uid:
-                raise ConnectionError(
-                    "Authentication failed. Are ODOO_DATABASE, ODOO_USERNAME and "
-                    "ODOO_PASSWORD set correctly?"
-                )
-            self._uid = cast(int, uid)
-        except Exception as ex:
-            raise ex
+        self._uid = cast(int, uid)
 
     def _search(self, model: str, domain: list, limit: int) -> list[int]:
         """Search for all records of model matching given domain.
