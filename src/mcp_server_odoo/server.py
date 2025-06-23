@@ -93,8 +93,8 @@ class OdooMCP:
 
             if not tool_registered:
                 logger.warning(
-                    f"Requested tool '{tool}' has not been found (double-check "
-                    "name spelling and EXT_DIRECTORIES variable))"
+                    f"Tool '{tool}' not found. Check spelling and "
+                    f"EXT_DIRECTORIES ({config.ext_directories})"
                 )
 
     def run(self) -> None:
