@@ -20,11 +20,6 @@ config = Config()
 logging.basicConfig(level=config.log_level, format=config.log_format)
 logger = logging.getLogger(__name__)
 
-odoo_client = OdooClient(
-    config.xmlrpc_url, config.odoo_username, config.odoo_password, config.odoo_database
-)
-odoo_client.login()
-
 
 @dataclass
 class AppContext:
@@ -33,7 +28,19 @@ class AppContext:
 
 @asynccontextmanager
 async def app_lifespan(_: FastMCP) -> AsyncIterator[AppContext]:
-    yield AppContext(client=odoo_client)
+    try:
+        odoo_client = OdooClient(
+            config.xmlrpc_url,
+            config.odoo_username,
+            config.odoo_password,
+            config.odoo_database,
+        )
+        odoo_client.login()
+        logger.info(f"Connected successfully to Odoo at {config.xmlrpc_url}")
+        yield AppContext(client=odoo_client)
+    except Exception as ex:
+        logger.error(f"Failed to connect to Odoo {ex}")
+        raise
 
 
 class OdooMCP:
