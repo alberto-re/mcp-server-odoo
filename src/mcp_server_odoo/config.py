@@ -7,7 +7,7 @@ DEFAULT_ODOO_VERSION = "18"
 DEFAULT_ODOO_BASE_URL = "http://localhost:8069"
 DEFAULT_LOG_LEVEL = "INFO"
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-DEFAULT_TRANSPORT_PROTOCOL = "sse"
+DEFAULT_TRANSPORT_PROTOCOL = "stdio"
 DEFAULT_TOOLS_TO_REGISTER = "search_partners,search_quotations,search_sales_orders"
 DEFAULT_HOST = "127.0.0.1"
 
