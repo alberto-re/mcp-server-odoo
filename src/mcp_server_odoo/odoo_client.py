@@ -37,6 +37,20 @@ class OdooClient:
             )
         self._uid = cast(int, uid)
 
+    def _execute_kw(
+        self, model: str, method: str, args: list[Any], kwargs: dict[str, Any]
+    ) -> Any:
+        """Wrapper for the low-level function execute_kw."""
+        return self._models.execute_kw(
+            self._db,
+            self._uid,
+            self._password,
+            model,
+            method,
+            args,
+            kwargs,
+        )
+
     def _search(self, model: str, domain: list, limit: int) -> list[int]:
         """Search for all records of model matching given domain.
 
@@ -53,10 +67,7 @@ class OdooClient:
             method,
             model,
         )
-        ids = self._models.execute_kw(
-            self._db,
-            self._uid,
-            self._password,
+        ids = self._execute_kw(
             model,
             method,
             domain,
@@ -78,10 +89,7 @@ class OdooClient:
             method,
             model,
         )
-        records = self._models.execute_kw(
-            self._db,
-            self._uid,
-            self._password,
+        records = self._execute_kw(
             model,
             method,
             [ids],
